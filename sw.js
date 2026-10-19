@@ -1,5 +1,5 @@
 // Primero internet (para tener siempre la versión nueva); sin señal, usa la copia guardada.
-const CACHE = 'karen-macros-v1';
+const CACHE = 'karen-macros-v2';
 const ARCHIVOS = ['./', 'index.html', 'manifest.json', 'icon-180.png', 'icon-192.png', 'icon-512.png'];
 
 self.addEventListener('install', e => {

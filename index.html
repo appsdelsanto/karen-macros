@@ -199,8 +199,14 @@ function cargar(){
   try{ const s = JSON.parse(localStorage.getItem(CLAVE)); if(s && s.v===1) return s; }catch(e){}
   return {v:1, metas:{k:1800,p:120,c:180,g:60}, dias:{}, mios:[], usos:{}};
 }
-function guardar(){
-  try{ localStorage.setItem(CLAVE, JSON.stringify(S)); }catch(e){ aviso('No se pudo guardar'); }
+// Guarda y comprueba leyendo de vuelta; solo confirma con "ok" si de verdad quedó guardado.
+function guardar(ok){
+  try{
+    const txt=JSON.stringify(S); localStorage.setItem(CLAVE, txt);
+    if(localStorage.getItem(CLAVE)!==txt) throw 0;
+  }catch(e){ aviso('⚠️ No se pudo guardar. Haz un respaldo.', 5000); return false; }
+  if(ok) aviso(ok);
+  return true;
 }
 function hoy(){ const d=new Date(); return clave(d); }
 function clave(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
@@ -217,7 +223,7 @@ function totales(regs){
   return regs.reduce((t,r)=>({k:t.k+r.k*r.q, p:t.p+r.p*r.q, c:t.c+r.c*r.q, g:t.g+r.g*r.q}), {k:0,p:0,c:0,g:0});
 }
 function comidaPorHora(){ const h=new Date().getHours(); return h<11?'desayuno':h<17?'comida':h<19?'colaciones':'cena'; }
-function aviso(t){ const a=$('#aviso'); a.textContent=t; a.hidden=false; clearTimeout(aviso.t); aviso.t=setTimeout(()=>a.hidden=true,1800); }
+function aviso(t,ms){ const a=$('#aviso'); a.textContent=t; a.hidden=false; clearTimeout(aviso.t); aviso.t=setTimeout(()=>a.hidden=true,ms||1800); }
 
 function etiquetaDia(){
   const d=deClave(dia), h=deClave(hoy()), dif=Math.round((d-h)/864e5);
@@ -377,9 +383,10 @@ function importar(e){
   const f=e.target.files[0]; if(!f) return;
   f.text().then(t=>{
     const s=JSON.parse(t);
-    if(!s || s.v!==1 || !s.dias) throw 0;
+    if(!s || s.v!==1 || typeof s.dias!=='object' || !s.metas || !Array.isArray(s.mios) || typeof s.usos!=='object') throw 0;
     if(!confirm('Esto reemplaza lo que hay en el teléfono con el respaldo. ¿Seguir?')) return;
-    S=s; guardar(); aviso('Respaldo recuperado'); cerrarHoja();
+    const antes=S; S=s;
+    if(guardar('Respaldo recuperado')) cerrarHoja(); else { S=antes; guardar(); }
   }).catch(()=>aviso('Ese archivo no es un respaldo válido'));
 }
 
@@ -403,13 +410,13 @@ const A = {
         k:a.k, p:a.p, c:a.c, g:a.g, q:H.q, m:H.m});
       S.usos[a.id]=(S.usos[a.id]||0)+1;
     }
-    guardar(); aviso(H.editId?'Guardado':'Agregado'); cerrarHoja();
+    guardar(H.editId?'Guardado':'Agregado'); cerrarHoja();
   },
   editar(b){
     const r=regsDia().find(x=>x.id===b.dataset.id); if(!r) return;
     H={editId:r.id, m:r.m, q:r.q, ali:{id:r.fid,n:r.n,por:r.por,k:r.k,p:r.p,c:r.c,g:r.g}}; vistaCantidad();
   },
-  borrar(){ S.dias[dia]=regsDia().filter(x=>x.id!==H.editId); guardar(); aviso('Borrado'); cerrarHoja(); },
+  borrar(){ S.dias[dia]=regsDia().filter(x=>x.id!==H.editId); guardar('Borrado'); cerrarHoja(); },
   nuevo(){ vistaNuevo(); },
   guardarNuevo(){
     const n=$('#nN').value.trim(); if(!n){ aviso('Falta el nombre'); return; }
@@ -420,7 +427,7 @@ const A = {
   metas: vistaMetas,
   guardarMetas(){
     S.metas={k:r0(num('#mK'))||1800, p:r0(num('#mP')), c:r0(num('#mC')), g:r0(num('#mG'))};
-    guardar(); aviso('Metas guardadas'); cerrarHoja();
+    guardar('Metas guardadas'); cerrarHoja();
   },
   copiar(){
     const d=deClave(dia); d.setDate(d.getDate()-1); const ay=S.dias[clave(d)]||[];
@@ -428,7 +435,7 @@ const A = {
     if(!confirm(`¿Copiar los ${ay.length} alimentos del día anterior a este día?`)) return;
     const regs=S.dias[dia]||(S.dias[dia]=[]);
     ay.forEach((r,i)=>regs.push({...r, id:Date.now().toString(36)+i}));
-    guardar(); aviso('Copiado'); render();
+    guardar('Copiado'); render();
   },
   respaldo: vistaRespaldo,
   exportar,
