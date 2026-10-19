@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Karen Macros</title>
+<meta name="description" content="Cuenta calorías y macros del día">
+<meta name="theme-color" content="#0b1d3a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Macros">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-192.png">
+<style>
+:root{
+  --navy:#0b1d3a;--navy2:#132a4f;--navy3:#1d3a68;--linea:#2a4778;
+  --gold:#d4af37;--mint:#7fe0c0;--cream:#f5ecd7;--muted:#a9b4c8;--rojo:#ff8a7a;
+  --prot:#7fe0c0;--carb:#d4af37;--gras:#e8a0bf;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--navy);color:var(--cream);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;font-size:17px}
+body{padding:calc(env(safe-area-inset-top) + 8px) 16px calc(env(safe-area-inset-bottom) + 140px)}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+input{font:inherit;font-size:17px}
+.muted{color:var(--muted)}
+.top{display:flex;align-items:center;justify-content:space-between;margin:4px 0 12px}
+.top .nav{width:48px;height:48px;font-size:28px;border-radius:14px;background:var(--navy2)}
+.fecha{font-weight:700;font-size:20px;text-align:center}
+.fecha small{display:block;font-weight:400;font-size:13px;color:var(--muted)}
+.card{background:var(--navy2);border-radius:20px;padding:16px;margin-bottom:14px}
+.resumen{display:flex;gap:16px;align-items:center}
+.anillo{position:relative;width:128px;height:128px;flex:none}
+.anillo svg{transform:rotate(-90deg)}
+.anillo .centro{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.anillo .num{font-size:28px;font-weight:800;line-height:1}
+.anillo .lbl{font-size:12px;color:var(--muted);margin-top:4px}
+.barras{flex:1;min-width:0;display:flex;flex-direction:column;gap:10px}
+.barra .fila{display:flex;justify-content:space-between;font-size:14px;margin-bottom:4px}
+.barra .fila b{font-weight:600}
+.barra .riel{height:10px;border-radius:5px;background:var(--navy3);overflow:hidden}
+.barra .lleno{height:100%;border-radius:5px}
+.comida h2{display:flex;justify-content:space-between;align-items:baseline;font-size:17px;margin:0 0 8px}
+.comida h2 span{font-size:14px;font-weight:400;color:var(--muted)}
+.reg{display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%;text-align:left;
+  padding:10px 0;border-top:1px solid var(--linea)}
+.reg .n{font-weight:600}
+.reg .d{font-size:13px;color:var(--muted)}
+.reg .k{font-weight:700;white-space:nowrap}
+.mas-chico{margin-top:6px;color:var(--mint);font-weight:600;padding:8px 0}
+.abajo{display:flex;justify-content:center;gap:24px;margin-top:8px}
+.abajo button{color:var(--muted);font-size:14px;padding:10px}
+.principal{display:block;width:100%;height:60px;border-radius:18px;background:var(--gold);color:var(--navy);
+  font-weight:800;font-size:19px}
+.flota{position:fixed;left:16px;right:16px;width:auto;bottom:calc(env(safe-area-inset-bottom) + 60px);z-index:5;
+  box-shadow:0 6px 24px rgba(0,0,0,.45)}
+.sec{display:block;width:100%;height:52px;border-radius:16px;background:var(--navy3);font-weight:600;margin-top:10px}
+.peligro{color:var(--rojo)}
+/* hoja */
+.hoja{position:fixed;inset:0;z-index:10;background:var(--navy);overflow-y:auto;-webkit-overflow-scrolling:touch;
+  padding:calc(env(safe-area-inset-top) + 8px) 16px calc(env(safe-area-inset-bottom) + 80px)}
+.hoja[hidden]{display:none}
+.hoja-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.hoja-top b{font-size:19px}
+.hoja-top button{min-width:72px;height:44px;color:var(--mint);font-weight:600;text-align:left}
+.hoja-top span{min-width:72px}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.chip{padding:10px 14px;border-radius:999px;background:var(--navy2);font-size:15px}
+.chip.on{background:var(--mint);color:var(--navy);font-weight:700}
+.buscar{width:100%;height:52px;border-radius:14px;border:1px solid var(--linea);background:var(--navy2);
+  color:var(--cream);padding:0 14px;outline:none}
+.buscar:focus{border-color:var(--mint)}
+.grupo{font-size:13px;color:var(--gold);text-transform:uppercase;letter-spacing:.06em;margin:16px 0 4px}
+.ali{display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%;text-align:left;
+  padding:12px 0;border-bottom:1px solid var(--linea)}
+.ali .d{font-size:13px;color:var(--muted)}
+.ali .k{white-space:nowrap;color:var(--muted);font-size:14px}
+.cant{display:flex;align-items:center;justify-content:center;gap:24px;margin:20px 0}
+.cant button{width:64px;height:64px;border-radius:50%;background:var(--navy3);font-size:32px}
+.cant .q{font-size:40px;font-weight:800;min-width:90px;text-align:center}
+.macros4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:16px 0 20px;text-align:center}
+.macros4 div{background:var(--navy2);border-radius:14px;padding:10px 4px}
+.macros4 b{display:block;font-size:20px}
+.macros4 span{font-size:12px;color:var(--muted)}
+.campo{display:block;margin-bottom:12px}
+.campo span{display:block;font-size:14px;color:var(--muted);margin-bottom:4px}
+.campo input{width:100%;height:50px;border-radius:12px;border:1px solid var(--linea);background:var(--navy2);
+  color:var(--cream);padding:0 12px;outline:none}
+.campo input:focus{border-color:var(--mint)}
+.dos{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.nota{font-size:14px;color:var(--muted);line-height:1.4}
+.aviso{position:fixed;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top) + 12px);z-index:20;
+  background:var(--mint);color:var(--navy);font-weight:700;padding:10px 18px;border-radius:999px;font-size:15px}
+.vacio{color:var(--muted);font-size:14px;padding:4px 0}
+</style>
+</head>
+<body>
+<main id="app"></main>
+<button class="principal flota" data-a="agregar">Agregar comida</button>
+<section class="hoja" id="hoja" hidden></section>
+<div class="aviso" id="aviso" hidden></div>
+
+<script>
+'use strict';
+// Valores aproximados por porción: [id, nombre, porción, kcal, proteína, carbohidratos, grasa, grupo]
+const BASE = [
+  ['huevo','Huevo entero','1 pieza',72,6.3,0.4,4.8,'Proteínas'],
+  ['clara','Clara de huevo','1 pieza',17,3.6,0.2,0.1,'Proteínas'],
+  ['pechuga','Pechuga de pollo cocida','100 g',165,31,0,3.6,'Proteínas'],
+  ['muslo','Muslo de pollo sin piel cocido','100 g',180,25,0,8.2,'Proteínas'],
+  ['bistec','Bistec de res cocido','100 g',200,29,0,9,'Proteínas'],
+  ['molida','Carne molida 90/10 cocida','100 g',217,26,0,12,'Proteínas'],
+  ['lomo','Lomo de cerdo cocido','100 g',190,29,0,7.5,'Proteínas'],
+  ['atun','Atún en agua (drenado)','1 lata (120 g)',130,29,0,1,'Proteínas'],
+  ['salmon','Salmón cocido','100 g',206,22,0,12,'Proteínas'],
+  ['tilapia','Pescado blanco (tilapia) cocido','100 g',128,26,0,2.7,'Proteínas'],
+  ['camaron','Camarón cocido','100 g',99,24,0.2,0.3,'Proteínas'],
+  ['jamon','Jamón de pavo','2 rebanadas (40 g)',45,7,1.5,1,'Proteínas'],
+  ['salchicha','Salchicha de pavo','1 pieza',90,5.5,1.5,7,'Proteínas'],
+  ['whey','Proteína en polvo','1 scoop (30 g)',120,24,3,1.5,'Proteínas'],
+  ['panela','Queso panela','30 g',75,5.4,0.9,5.4,'Lácteos'],
+  ['oaxaca','Queso Oaxaca','30 g',95,7,0.5,7,'Lácteos'],
+  ['cottage','Queso cottage','½ taza (113 g)',111,12.6,3.8,4.9,'Lácteos'],
+  ['griego','Yogur griego natural sin azúcar','150 g',90,15,5.5,0.6,'Lácteos'],
+  ['yogur','Yogur natural entero','1 taza',150,8.5,11.4,8,'Lácteos'],
+  ['leche','Leche entera','1 taza (240 ml)',150,8,12,8,'Lácteos'],
+  ['lechedes','Leche descremada','1 taza (240 ml)',83,8.3,12,0.2,'Lácteos'],
+  ['almendra','Leche de almendra sin azúcar','1 taza (240 ml)',35,1,1.5,2.5,'Lácteos'],
+  ['tortilla','Tortilla de maíz','1 pieza',64,1.7,13.4,0.8,'Cereales'],
+  ['harina','Tortilla de harina','1 pieza',120,3.2,20,3,'Cereales'],
+  ['bolillo','Bolillo','1 pieza',165,5.4,32,1.4,'Cereales'],
+  ['panblanco','Pan de caja blanco','1 rebanada',67,2.3,12.6,0.8,'Cereales'],
+  ['panint','Pan integral','1 rebanada',70,3.5,12,1,'Cereales'],
+  ['arroz','Arroz blanco cocido','1 taza',205,4.3,44.5,0.4,'Cereales'],
+  ['pasta','Pasta cocida','1 taza',220,8.1,43,1.3,'Cereales'],
+  ['avena','Avena en hojuelas (cruda)','½ taza (40 g)',150,5.3,27,2.6,'Cereales'],
+  ['granola','Granola','¼ taza (30 g)',135,3,20,5,'Cereales'],
+  ['papa','Papa cocida','1 mediana',130,2.9,30,0.2,'Cereales'],
+  ['camote','Camote cocido','1 taza',180,4,41,0.3,'Cereales'],
+  ['frijol','Frijoles de olla','1 taza',227,15.2,40.8,0.9,'Leguminosas'],
+  ['refritos','Frijoles refritos','½ taza',140,7,18,4.5,'Leguminosas'],
+  ['platano','Plátano','1 mediano',105,1.3,27,0.4,'Frutas'],
+  ['manzana','Manzana','1 mediana',95,0.5,25,0.3,'Frutas'],
+  ['naranja','Naranja','1 mediana',62,1.2,15.4,0.2,'Frutas'],
+  ['papaya','Papaya','1 taza',62,0.7,15.7,0.4,'Frutas'],
+  ['fresas','Fresas','1 taza',48,1,11.5,0.5,'Frutas'],
+  ['mango','Mango','1 taza',99,1.4,25,0.6,'Frutas'],
+  ['sandia','Sandía','1 taza',46,0.9,11.5,0.2,'Frutas'],
+  ['uvas','Uvas','1 taza',104,1.1,27,0.2,'Frutas'],
+  ['aguacate','Aguacate','½ pieza',112,1.4,6,10.3,'Grasas'],
+  ['brocoli','Brócoli cocido','1 taza',55,3.7,11.2,0.6,'Verduras'],
+  ['ensalada','Ensalada verde (lechuga)','2 tazas',10,0.9,2,0.1,'Verduras'],
+  ['jitomate','Jitomate','1 pieza',22,1.1,4.8,0.2,'Verduras'],
+  ['calabacita','Calabacita cocida','1 taza',27,2,4.9,0.6,'Verduras'],
+  ['nopales','Nopales cocidos','1 taza',22,2,4.9,0.1,'Verduras'],
+  ['zanahoria','Zanahoria','1 pieza',25,0.6,6,0.1,'Verduras'],
+  ['pepino','Pepino','1 taza',18,0.8,4.3,0.1,'Verduras'],
+  ['aceite','Aceite (oliva o vegetal)','1 cucharada',120,0,0,14,'Grasas'],
+  ['mantequilla','Mantequilla','1 cucharada',102,0.1,0,11.5,'Grasas'],
+  ['mayonesa','Mayonesa','1 cucharada',94,0.1,0.1,10.3,'Grasas'],
+  ['crema_cac','Crema de cacahuate','1 cucharada',95,3.5,3.5,8,'Grasas'],
+  ['almendras','Almendras','28 g (23 piezas)',164,6,6.1,14.2,'Grasas'],
+  ['nueces','Nueces','28 g',185,4.3,3.9,18.5,'Grasas'],
+  ['cacahuates','Cacahuates','28 g',161,7.3,4.6,14,'Grasas'],
+  ['pastor','Taco al pastor','1 pieza',150,8,14,7,'Platillos'],
+  ['taco_bistec','Taco de bistec','1 pieza',140,9,13,6,'Platillos'],
+  ['quesadilla','Quesadilla de queso (maíz)','1 pieza',180,8,15,10,'Platillos'],
+  ['torta','Torta de jamón','1 pieza',450,20,55,16,'Platillos'],
+  ['tamal','Tamal (verde o rojo)','1 pieza',280,8,30,14,'Platillos'],
+  ['chilaquiles','Chilaquiles rojos con crema','1 plato',450,12,45,25,'Platillos'],
+  ['pozole','Pozole rojo','1 plato',350,25,35,12,'Platillos'],
+  ['sopa_pasta','Sopa de pasta','1 taza',120,4,20,2.5,'Platillos'],
+  ['pizza','Pizza de pepperoni','1 rebanada grande',300,12,34,13,'Platillos'],
+  ['hamburguesa','Hamburguesa con queso','1 pieza',300,15,33,12,'Platillos'],
+  ['cafe','Café con leche entera','1 taza',75,4,6,4,'Bebidas'],
+  ['jugo','Jugo de naranja','1 vaso (240 ml)',112,1.7,26,0.5,'Bebidas'],
+  ['refresco','Refresco de cola','1 lata (355 ml)',140,0,39,0,'Bebidas'],
+  ['cerveza','Cerveza','1 lata (355 ml)',153,1.6,12.6,0,'Bebidas'],
+  ['cerveza_l','Cerveza light','1 lata (355 ml)',103,0.9,5.8,0,'Bebidas'],
+  ['concha','Concha (pan dulce)','1 pieza',300,6,45,11,'Dulces'],
+  ['maria','Galletas María','6 piezas',130,2,22,4,'Dulces'],
+  ['chocolate','Chocolate de leche','1 barra (40 g)',215,3,24,12,'Dulces'],
+  ['azucar','Azúcar','1 cucharadita',16,0,4,0,'Dulces'],
+  ['miel','Miel','1 cucharada',64,0.1,17.3,0,'Dulces'],
+].map(([id,n,por,k,p,c,g,gr])=>({id,n,por,k,p,c,g,gr}));
+
+const COMIDAS = [['desayuno','Desayuno'],['comida','Comida'],['cena','Cena'],['colaciones','Colaciones']];
+const CLAVE = 'karen-macros-v1';
+const $ = s => document.querySelector(s);
+const app = $('#app'), hoja = $('#hoja');
+
+let S = cargar();
+let dia = hoy();
+let H = {}; // estado de la hoja abierta
+
+function cargar(){
+  try{ const s = JSON.parse(localStorage.getItem(CLAVE)); if(s && s.v===1) return s; }catch(e){}
+  return {v:1, metas:{k:1800,p:120,c:180,g:60}, dias:{}, mios:[], usos:{}};
+}
+function guardar(){
+  try{ localStorage.setItem(CLAVE, JSON.stringify(S)); }catch(e){ aviso('No se pudo guardar'); }
+}
+function hoy(){ const d=new Date(); return clave(d); }
+function clave(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function deClave(k){ const [a,m,d]=k.split('-').map(Number); return new Date(a,m-1,d); }
+function esc(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function r0(x){ return Math.round(x); }
+function r1(x){ return Math.round(x*10)/10; }
+function sinAcentos(s){ return s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase(); }
+function fmtQ(q){ const e=Math.floor(q), f=q-e; const fr = f===0.5?'½':f===0.25?'¼':f===0.75?'¾':(f?String(r1(f)).slice(1):''); return (e||!fr? e:'')+fr; }
+function todos(){ return [...S.mios, ...BASE]; }
+function buscarAli(id){ return todos().find(a=>a.id===id); }
+function regsDia(){ return S.dias[dia] || []; }
+function totales(regs){
+  return regs.reduce((t,r)=>({k:t.k+r.k*r.q, p:t.p+r.p*r.q, c:t.c+r.c*r.q, g:t.g+r.g*r.q}), {k:0,p:0,c:0,g:0});
+}
+function comidaPorHora(){ const h=new Date().getHours(); return h<11?'desayuno':h<17?'comida':h<19?'colaciones':'cena'; }
+function aviso(t){ const a=$('#aviso'); a.textContent=t; a.hidden=false; clearTimeout(aviso.t); aviso.t=setTimeout(()=>a.hidden=true,1800); }
+
+function etiquetaDia(){
+  const d=deClave(dia), h=deClave(hoy()), dif=Math.round((d-h)/864e5);
+  const nombre = dif===0?'Hoy':dif===-1?'Ayer':dif===1?'Mañana':d.toLocaleDateString('es-MX',{weekday:'long'});
+  const fecha = d.toLocaleDateString('es-MX',{day:'numeric',month:'long'});
+  return `${nombre[0].toUpperCase()+nombre.slice(1)}<small>${fecha}</small>`;
+}
+
+function anillo(v,meta){
+  const R=56, L=2*Math.PI*R, f=Math.min(v/(meta||1),1), pasado=v>meta;
+  const resta=r0(meta-v);
+  return `<div class="anillo">
+    <svg width="128" height="128"><circle cx="64" cy="64" r="${R}" fill="none" stroke="var(--navy3)" stroke-width="12"/>
+    ${f>0?`<circle cx="64" cy="64" r="${R}" fill="none" stroke="${pasado?'var(--rojo)':'var(--gold)'}" stroke-width="12"
+      stroke-linecap="round" stroke-dasharray="${L*f} ${L}"/>`:''}</svg>
+    <div class="centro"><div class="num">${Math.abs(resta)}</div><div class="lbl">${resta>=0?'kcal quedan':'kcal de más'}</div>
+    <div class="lbl">${r0(v)} de ${meta}</div></div></div>`;
+}
+function barra(nom,v,meta,col){
+  const f=Math.min(v/(meta||1),1)*100;
+  return `<div class="barra"><div class="fila"><b>${nom}</b><span>${r0(v)} / ${meta} g</span></div>
+    <div class="riel"><div class="lleno" style="width:${f}%;background:${v>meta*1.05?'var(--rojo)':`var(--${col})`}"></div></div></div>`;
+}
+
+function render(){
+  const regs=regsDia(), t=totales(regs), M=S.metas;
+  app.innerHTML = `
+  <header class="top">
+    <button class="nav" data-a="dia" data-d="-1" aria-label="Día anterior">‹</button>
+    <div class="fecha" data-a="hoy">${etiquetaDia()}</div>
+    <button class="nav" data-a="dia" data-d="1" aria-label="Día siguiente">›</button>
+  </header>
+  <section class="card resumen">
+    ${anillo(t.k,M.k)}
+    <div class="barras">${barra('Proteína',t.p,M.p,'prot')}${barra('Carbohidratos',t.c,M.c,'carb')}${barra('Grasa',t.g,M.g,'gras')}</div>
+  </section>
+  ${COMIDAS.map(([id,nom])=>{
+    const rs=regs.filter(r=>r.m===id), tk=totales(rs).k;
+    return `<section class="card comida"><h2>${nom}<span>${rs.length?r0(tk)+' kcal':''}</span></h2>
+      ${rs.map(r=>`<button class="reg" data-a="editar" data-id="${r.id}">
+        <div><div class="n">${esc(r.n)}</div><div class="d">${fmtQ(r.q)} × ${esc(r.por)} · P ${r0(r.p*r.q)} · C ${r0(r.c*r.q)} · G ${r0(r.g*r.q)}</div></div>
+        <div class="k">${r0(r.k*r.q)}</div></button>`).join('')}
+      <button class="mas-chico" data-a="agregar" data-m="${id}">+ Agregar</button></section>`;
+  }).join('')}
+  <nav class="abajo"><button data-a="metas">Metas</button><button data-a="copiar">Repetir ayer</button><button data-a="respaldo">Respaldo</button></nav>`;
+}
+
+// ---------- Hoja: agregar ----------
+function abrirHoja(html){ hoja.innerHTML=html; hoja.hidden=false; hoja.scrollTop=0; document.body.style.overflow='hidden'; }
+function cerrarHoja(){ hoja.hidden=true; hoja.innerHTML=''; document.body.style.overflow=''; H={}; render(); }
+
+function chipsComida(){
+  return `<div class="chips">${COMIDAS.map(([id,nom])=>`<button class="chip ${H.m===id?'on':''}" data-a="elegirM" data-m="${id}">${nom}</button>`).join('')}</div>`;
+}
+function vistaBuscar(){
+  abrirHoja(`<div class="hoja-top"><button data-a="cerrar">Cerrar</button><b>Agregar</b><span></span></div>
+    <div id="chipsM">${chipsComida()}</div>
+    <input class="buscar" id="q" type="search" placeholder="Buscar alimento…" autocomplete="off" value="${esc(H.busca||'')}">
+    <div id="lista"></div>
+    <button class="sec" data-a="nuevo">+ Alimento nuevo</button>`);
+  $('#q').addEventListener('input',e=>{ H.busca=e.target.value; pintarLista(); });
+  pintarLista();
+}
+function filaAli(a){
+  return `<button class="ali" data-a="elegir" data-id="${esc(a.id)}"><div><div>${esc(a.n)}${a.mio?' <span class="muted">· mío</span>':''}</div>
+    <div class="d">${esc(a.por)} · P ${r1(a.p)} · C ${r1(a.c)} · G ${r1(a.g)}</div></div><div class="k">${r0(a.k)} kcal</div></button>`;
+}
+function pintarLista(){
+  const q=sinAcentos(H.busca||'').trim(), L=todos();
+  let html='';
+  if(q){
+    const r=L.filter(a=>sinAcentos(a.n).includes(q));
+    html = r.length? r.map(filaAli).join('') : `<p class="vacio">No está en la lista. Agrégalo con “Alimento nuevo”.</p>`;
+  }else{
+    const frec=Object.entries(S.usos).sort((a,b)=>b[1]-a[1]).map(([id])=>buscarAli(id)).filter(Boolean).slice(0,8);
+    if(frec.length) html+=`<div class="grupo">Frecuentes</div>`+frec.map(filaAli).join('');
+    if(S.mios.length) html+=`<div class="grupo">Mis alimentos</div>`+S.mios.map(filaAli).join('');
+    const grupos=[...new Set(BASE.map(a=>a.gr))];
+    for(const g of grupos) html+=`<div class="grupo">${g}</div>`+BASE.filter(a=>a.gr===g).map(filaAli).join('');
+  }
+  $('#lista').innerHTML=html;
+}
+
+// ---------- Hoja: cantidad ----------
+function vistaCantidad(){
+  const a=H.ali, q=H.q;
+  abrirHoja(`<div class="hoja-top"><button data-a="${H.editId?'cerrar':'volver'}">${H.editId?'Cerrar':'‹ Lista'}</button><b>${H.editId?'Editar':'Cantidad'}</b><span></span></div>
+    <div style="font-size:21px;font-weight:700">${esc(a.n)}</div>
+    <div class="muted">Porción: ${esc(a.por)}</div>
+    <div class="cant"><button data-a="q" data-d="-0.5" aria-label="Menos">−</button><div class="q">${fmtQ(q)}</div><button data-a="q" data-d="0.5" aria-label="Más">+</button></div>
+    <div class="chips" style="justify-content:center">${[0.5,1,1.5,2,3].map(v=>`<button class="chip ${q===v?'on':''}" data-a="qfija" data-v="${v}">${fmtQ(v)}</button>`).join('')}</div>
+    <div class="macros4">
+      <div><b>${r0(a.k*q)}</b><span>kcal</span></div>
+      <div><b style="color:var(--prot)">${r0(a.p*q)}</b><span>Proteína</span></div>
+      <div><b style="color:var(--carb)">${r0(a.c*q)}</b><span>Carbos</span></div>
+      <div><b style="color:var(--gras)">${r0(a.g*q)}</b><span>Grasa</span></div>
+    </div>
+    ${chipsComida()}
+    <button class="principal" data-a="confirmar">${H.editId?'Guardar':'Agregar'}</button>
+    ${H.editId?`<button class="sec peligro" data-a="borrar">Borrar de ${COMIDAS.find(c=>c[0]===H.m)[1].toLowerCase()}</button>`:''}`);
+}
+
+// ---------- Hoja: alimento nuevo ----------
+function vistaNuevo(){
+  abrirHoja(`<div class="hoja-top"><button data-a="volver">‹ Lista</button><b>Alimento nuevo</b><span></span></div>
+    <label class="campo"><span>Nombre</span><input id="nN" value="${esc(H.busca||'')}" placeholder="Ej. Barra de proteína"></label>
+    <label class="campo"><span>Porción</span><input id="nPor" placeholder="Ej. 1 pieza, 100 g, 1 taza"></label>
+    <div class="dos">
+      <label class="campo"><span>Proteína (g)</span><input id="nP" inputmode="decimal"></label>
+      <label class="campo"><span>Carbohidratos (g)</span><input id="nC" inputmode="decimal"></label>
+      <label class="campo"><span>Grasa (g)</span><input id="nG" inputmode="decimal"></label>
+      <label class="campo"><span>Calorías</span><input id="nK" inputmode="decimal" placeholder="Se calcula sola"></label>
+    </div>
+    <p class="nota">Copia los datos de la etiqueta. Si dejas las calorías vacías, se calculan con los macros (4 · 4 · 9).</p>
+    <button class="principal" data-a="guardarNuevo">Guardar y seguir</button>`);
+  $('#nN').focus();
+}
+function num(id){ const v=parseFloat(($(id).value||'').replace(',','.')); return isFinite(v)&&v>=0?v:0; }
+
+// ---------- Hoja: metas ----------
+function vistaMetas(){
+  const M=S.metas;
+  abrirHoja(`<div class="hoja-top"><button data-a="cerrar">Cerrar</button><b>Metas del día</b><span></span></div>
+    <label class="campo"><span>Calorías</span><input id="mK" inputmode="numeric" value="${M.k}"></label>
+    <div class="dos">
+      <label class="campo"><span>Proteína (g)</span><input id="mP" inputmode="numeric" value="${M.p}"></label>
+      <label class="campo"><span>Carbohidratos (g)</span><input id="mC" inputmode="numeric" value="${M.c}"></label>
+      <label class="campo"><span>Grasa (g)</span><input id="mG" inputmode="numeric" value="${M.g}"></label>
+    </div>
+    <p class="nota" id="mNota"></p>
+    <button class="principal" data-a="guardarMetas">Guardar metas</button>`);
+  const nota=()=>{ const k=num('#mP')*4+num('#mC')*4+num('#mG')*9;
+    $('#mNota').textContent=`Tus macros suman ${r0(k)} kcal. Conviene que se acerquen a la meta de calorías.`; };
+  hoja.querySelectorAll('input').forEach(i=>i.addEventListener('input',nota)); nota();
+}
+
+// ---------- Hoja: respaldo ----------
+function vistaRespaldo(){
+  const nd=Object.keys(S.dias).filter(k=>S.dias[k].length).length;
+  abrirHoja(`<div class="hoja-top"><button data-a="cerrar">Cerrar</button><b>Respaldo</b><span></span></div>
+    <p class="nota">Todo se guarda solo en este teléfono (${nd} día${nd===1?'':'s'} con registros, ${S.mios.length} alimento${S.mios.length===1?'':'s'} propio${S.mios.length===1?'':'s'}). Haz un respaldo de vez en cuando y guárdalo en Archivos o mándatelo por WhatsApp.</p>
+    <button class="principal" data-a="exportar">Guardar respaldo</button>
+    <label class="sec" style="display:flex;align-items:center;justify-content:center">Recuperar respaldo
+      <input type="file" id="imp" accept="application/json,.json" hidden></label>`);
+  $('#imp').addEventListener('change',importar);
+}
+async function exportar(){
+  const txt=JSON.stringify(S), nombre=`karen-macros-${hoy()}.json`;
+  const f=new File([txt],nombre,{type:'application/json'});
+  if(navigator.canShare && navigator.canShare({files:[f]})){
+    try{ await navigator.share({files:[f],title:'Respaldo Karen Macros'}); return; }catch(e){ if(e.name==='AbortError') return; }
+  }
+  const a=document.createElement('a'); a.href=URL.createObjectURL(f); a.download=nombre; a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),5000);
+}
+function importar(e){
+  const f=e.target.files[0]; if(!f) return;
+  f.text().then(t=>{
+    const s=JSON.parse(t);
+    if(!s || s.v!==1 || !s.dias) throw 0;
+    if(!confirm('Esto reemplaza lo que hay en el teléfono con el respaldo. ¿Seguir?')) return;
+    S=s; guardar(); aviso('Respaldo recuperado'); cerrarHoja();
+  }).catch(()=>aviso('Ese archivo no es un respaldo válido'));
+}
+
+// ---------- Acciones ----------
+const A = {
+  dia(b){ const d=deClave(dia); d.setDate(d.getDate()+Number(b.dataset.d)); dia=clave(d); render(); },
+  hoy(){ dia=hoy(); render(); },
+  agregar(b){ H={m:b.dataset.m||comidaPorHora(), busca:''}; vistaBuscar(); },
+  elegirM(b){ H.m=b.dataset.m; hoja.querySelectorAll('[data-a="elegirM"]').forEach(c=>c.classList.toggle('on',c.dataset.m===H.m)); },
+  cerrar: cerrarHoja,
+  volver(){ vistaBuscar(); },
+  elegir(b){ H.ali=buscarAli(b.dataset.id); H.q=1; H.editId=null; vistaCantidad(); },
+  q(b){ H.q=Math.max(0.5, H.q+Number(b.dataset.d)); vistaCantidad(); },
+  qfija(b){ H.q=Number(b.dataset.v); vistaCantidad(); },
+  confirmar(){
+    const a=H.ali, regs=S.dias[dia]||(S.dias[dia]=[]);
+    if(H.editId){
+      const r=regs.find(x=>x.id===H.editId); r.q=H.q; r.m=H.m;
+    }else{
+      regs.push({id:Date.now().toString(36)+Math.random().toString(36).slice(2,6), fid:a.id, n:a.n, por:a.por,
+        k:a.k, p:a.p, c:a.c, g:a.g, q:H.q, m:H.m});
+      S.usos[a.id]=(S.usos[a.id]||0)+1;
+    }
+    guardar(); aviso(H.editId?'Guardado':'Agregado'); cerrarHoja();
+  },
+  editar(b){
+    const r=regsDia().find(x=>x.id===b.dataset.id); if(!r) return;
+    H={editId:r.id, m:r.m, q:r.q, ali:{id:r.fid,n:r.n,por:r.por,k:r.k,p:r.p,c:r.c,g:r.g}}; vistaCantidad();
+  },
+  borrar(){ S.dias[dia]=regsDia().filter(x=>x.id!==H.editId); guardar(); aviso('Borrado'); cerrarHoja(); },
+  nuevo(){ vistaNuevo(); },
+  guardarNuevo(){
+    const n=$('#nN').value.trim(); if(!n){ aviso('Falta el nombre'); return; }
+    const p=num('#nP'), c=num('#nC'), g=num('#nG'); let k=num('#nK'); if(!k) k=p*4+c*4+g*9;
+    const a={id:'m'+Date.now().toString(36), n, por:$('#nPor').value.trim()||'1 porción', k:r1(k), p, c, g, gr:'Mis alimentos', mio:true};
+    S.mios.unshift(a); guardar(); H.ali=a; H.q=1; H.editId=null; vistaCantidad();
+  },
+  metas: vistaMetas,
+  guardarMetas(){
+    S.metas={k:r0(num('#mK'))||1800, p:r0(num('#mP')), c:r0(num('#mC')), g:r0(num('#mG'))};
+    guardar(); aviso('Metas guardadas'); cerrarHoja();
+  },
+  copiar(){
+    const d=deClave(dia); d.setDate(d.getDate()-1); const ay=S.dias[clave(d)]||[];
+    if(!ay.length){ aviso('El día anterior está vacío'); return; }
+    if(!confirm(`¿Copiar los ${ay.length} alimentos del día anterior a este día?`)) return;
+    const regs=S.dias[dia]||(S.dias[dia]=[]);
+    ay.forEach((r,i)=>regs.push({...r, id:Date.now().toString(36)+i}));
+    guardar(); aviso('Copiado'); render();
+  },
+  respaldo: vistaRespaldo,
+  exportar,
+};
+document.addEventListener('click',e=>{ const b=e.target.closest('[data-a]'); if(b && A[b.dataset.a]) A[b.dataset.a](b); });
+// Si la app se queda abierta de un día para otro, regresa a "hoy" al volver.
+let ultimoHoy=hoy();
+document.addEventListener('visibilitychange',()=>{ if(!document.hidden && hoy()!==ultimoHoy){ if(dia===ultimoHoy) dia=hoy(); ultimoHoy=hoy(); if(hoja.hidden) render(); } });
+
+render();
+if(navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(()=>{});
+if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(()=>{});
+</script>
+</body>
+</html>
