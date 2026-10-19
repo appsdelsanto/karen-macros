@@ -1,0 +1,335 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><title>Tu app de comida</title><style>@page { size: letter; margin: 0; }
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body { font-family: "Segoe UI", system-ui, sans-serif; color: #0b1d3a; font-size: 10.5pt; line-height: 1.38;
+  -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+.page { width: 8.5in; height: 11in; padding: 0.6in 0.6in 0.7in; position: relative; page-break-after: always;
+  background: #fbf7ee; overflow: hidden; }
+.page:last-child { page-break-after: auto; }
+.pie { position: absolute; bottom: 0.3in; left: 0.6in; right: 0.6in; font-size: 8pt; color: #8a94a8;
+  border-top: 1px solid #e6dcc4; padding-top: 6px; }
+h1 { font-size: 40pt; margin: 0.15in 0 0.1in; letter-spacing: -0.5px; }
+h2 { font-size: 21pt; margin: 0 0 4px; color: #0b1d3a; }
+h2::after { content: ""; display: block; width: 46px; height: 4px; background: #d4af37; border-radius: 2px; margin-top: 6px; }
+h2.mt { margin-top: 0.3in; }
+h3 { font-size: 12pt; margin: 0; line-height: 1.2; }
+h4 { font-size: 11pt; margin: 14px 0 6px; color: #1d3a68; }
+p { margin: 0 0 8px; }
+.intro { color: #4a5670; margin: 6px 0 14px; }
+
+/* Portada */
+.portada { background: #0b1d3a; color: #f5ecd7; display: flex; flex-direction: column; justify-content: center; padding: 1in; }
+.portada h1 { color: #f5ecd7; }
+.portada .sub { font-size: 15pt; color: #7fe0c0; margin-bottom: 0.4in; }
+.portada-caja { border-left: 4px solid #d4af37; padding: 4px 0 4px 18px; font-size: 12pt; max-width: 5.6in; }
+.portada-caja b { color: #d4af37; }
+.portada .fecha { position: absolute; bottom: 0.7in; left: 1in; color: #a9b4c8; }
+
+/* Columnas y listas */
+.dos-col { display: grid; grid-template-columns: 1fr 1fr; gap: 0.35in; margin-top: 10px; }
+.lista { padding-left: 0; list-style: none; margin: 0; }
+.lista li { margin-bottom: 10px; }
+.tres { display: flex; gap: 8px; margin: 8px 0 10px; }
+.tres span { flex: 1; text-align: center; border: 2px solid #1d3a68; border-radius: 20px; padding: 6px 4px; font-weight: 600; font-size: 9.5pt; }
+.caja-oro { background: #0b1d3a; color: #f5ecd7; border-radius: 14px; padding: 14px 16px; margin-top: 14px; }
+.caja-oro h4 { color: #d4af37; margin-top: 0; }
+.caja-oro .ruta { line-height: 1.8; }
+.caja-oro .ruta b { color: #7fe0c0; }
+
+/* Etiquetas */
+.chip { display: inline-block; font-size: 8pt; padding: 2px 8px; border-radius: 10px; margin: 2px 3px 2px 0; font-weight: 600; white-space: nowrap; }
+.chip.gratis { background: #d9f5ea; color: #0f5a43; }
+.chip.serv { background: #e3e9f6; color: #1d3a68; }
+.chip.ia { background: #f7ebc4; color: #6b5310; }
+.chip.local { background: #eef1f6; color: #4a5670; }
+.chip.red { background: #e3e9f6; color: #1d3a68; }
+.chip.envia { background: #f8dfe9; color: #7a2a4b; }
+.estado { display: inline-block; font-size: 8pt; font-weight: 700; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; letter-spacing: .4px; }
+.estado.nuevo { background: #0b1d3a; color: #f5ecd7; }
+.estado.mejora { background: #7fe0c0; color: #0b1d3a; }
+.estado.existe { background: #ddd; color: #333; }
+.sug { display: inline-block; font-size: 8pt; font-weight: 700; color: #8a6a0c; background: #fdf3d3; border: 1px solid #d4af37; padding: 1px 7px; border-radius: 4px; margin-left: 4px; }
+.prueba { display: inline-block; font-size: 8pt; font-weight: 700; color: #7a2a4b; border: 1px dashed #c76b93; padding: 1px 7px; border-radius: 4px; margin-left: 4px; }
+
+/* Tarjetas */
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.card { background: #fff; border: 1px solid #ece2cb; border-radius: 12px; padding: 10px 12px; break-inside: avoid; font-size: 9.3pt; }
+.card-top { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+.num { flex: none; width: 24px; height: 24px; border-radius: 50%; background: #d4af37; color: #0b1d3a; font-weight: 800;
+  display: flex; align-items: center; justify-content: center; font-size: 9.5pt; }
+.marcas { margin-bottom: 6px; }
+.card p { margin-bottom: 5px; }
+.card .dia { color: #4a5670; font-style: italic; }
+.card .dia b { font-style: normal; color: #1d3a68; }
+
+/* Condiciones */
+.conds { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.cond { background: #fff; border-left: 4px solid #7fe0c0; border-radius: 8px; padding: 9px 12px; margin-bottom: 8px; }
+.cond b { display: block; margin-bottom: 2px; }
+.cond span { color: #4a5670; font-size: 9.5pt; }
+
+/* Tablas */
+table { width: 100%; border-collapse: collapse; }
+.preg td, .preg th { padding: 9px 10px; border-bottom: 1px solid #e6dcc4; text-align: left; vertical-align: top; }
+.preg th { background: #0b1d3a; color: #f5ecd7; font-weight: 600; }
+.preg tr td:first-child { font-weight: 600; width: 55%; }
+.hoja { font-size: 8.6pt; }
+.hoja th { background: #0b1d3a; color: #f5ecd7; padding: 4px 6px; font-size: 8pt; text-align: center; }
+.hoja th:nth-child(2) { text-align: left; }
+.hoja td { padding: 2px 6px; border-bottom: 1px solid #eee4cd; height: 16px; }
+.hoja tr.g td { background: #f3ead4; font-weight: 700; color: #1d3a68; font-size: 8pt; padding: 3px 6px; }
+.hoja td.n { width: 24px; color: #8a94a8; text-align: right; }
+.hoja td.o { width: 82px; text-align: center; }
+.hoja td.o i { display: inline-block; width: 11px; height: 11px; border: 1.5px solid #1d3a68; border-radius: 50%; vertical-align: middle; }
+.resumen { padding-top: 0.4in; }
+.notas { margin-top: 8px; border: 1px dashed #c9bb95; border-radius: 8px; height: 0.38in; padding: 5px 10px; font-size: 9pt; }
+.resumen .pie { display: none; }
+</style></head><body><section class="page portada">
+  <div class="anillo"><svg viewBox="0 0 120 120" width="150" height="150">
+    <circle cx="60" cy="60" r="44" fill="none" stroke="#1d3a68" stroke-width="12"/>
+    <circle cx="60" cy="60" r="44" fill="none" stroke="#7fe0c0" stroke-width="12" stroke-dasharray="100 300" transform="rotate(-90 60 60)"/>
+    <circle cx="60" cy="60" r="44" fill="none" stroke="#d4af37" stroke-width="12" stroke-dasharray="85 300" stroke-dashoffset="-106" transform="rotate(-90 60 60)"/>
+    <circle cx="60" cy="60" r="44" fill="none" stroke="#e8a0bf" stroke-width="12" stroke-dasharray="50 300" stroke-dashoffset="-197" transform="rotate(-90 60 60)"/>
+    <circle cx="60" cy="60" r="9" fill="#f5ecd7"/></svg></div>
+  <h1>Tu app de comida</h1>
+  <p class="sub">Escoge cómo quieres que funcione tu app para contar calorías y macros.</p>
+  <div class="portada-caja">
+    <p>Revisamos las apps más usadas (MyFitnessPal, MacroFactor, Cronometer, Yazio, Fitia y otras), lo que dicen las personas que las usan y lo que se puede hacer en tu iPhone.</p>
+    <p>Aquí están las <b>30 funciones</b> que encontramos, explicadas en palabras sencillas. <b>Tú decides cuáles quieres.</b> No hay respuestas correctas, y lo que elijas hoy se puede cambiar después.</p>
+  </div>
+  <p class="fecha">Octubre 2026</p>
+</section><section class="page "><h2>Cómo leer este documento</h2>
+<div class="dos-col">
+<div>
+<h4>Cada función trae</h4>
+<ul class="lista">
+<li><span class="estado nuevo">Se agrega</span> es nueva · <span class="estado mejora">Se mejora</span> tu app ya tiene una parte.</li>
+<li><span class="sug">★ Sugerida</span> es nuestra recomendación, nada más. Tú decides.</li>
+<li><span class="prueba">Primero se prueba</span> si la eliges, primero hacemos una prueba en tu iPhone y luego decides si se queda.</li>
+</ul>
+<h4>Tres etiquetas</h4>
+<ul class="lista">
+<li><b>Costo:</b> <span class="chip gratis">Sin costo mensual</span> <span class="chip serv">Servicio: $0 normalmente</span> <span class="chip ia">IA: ~$20–60 al mes</span></li>
+<li><b>Internet:</b> <span class="chip local">Funciona sin internet</span> <span class="chip red">Necesita internet</span></li>
+<li><b>Tus datos:</b> <span class="chip local">No envía tus datos</span> <span class="chip envia">Envía algo, y dice qué</span></li>
+</ul>
+</div>
+<div>
+<h4>Cómo escoger</h4>
+<p>Al final hay una <b>hoja para marcar</b>. Para cada función eliges una de tres:</p>
+<div class="tres"><span>Sí, ahora</span><span>Quizá después</span><span>No me interesa</span></div>
+<p>Solo marcas en esa hoja; las tarjetas solo llevan su número.</p>
+<div class="caja-oro"><h4>Si solo tienes 5 minutos</h4>
+<p>Lee estas tarjetas, que son las que más ayudan a no dejar de anotar:</p>
+<p class="ruta"><b>1</b> Comidas guardadas · <b>2</b> Copiar una comida · <b>3</b> Frecuentes que recuerdan tu cantidad · <b>4</b> Mis recetas caseras · <b>5</b> Varios alimentos de una vez · <b>6</b> Anotación aproximada · <b>13</b> Elegir qué ver · <b>24</b> Resumen semanal · <b>29</b> Respaldo automático</p></div>
+</div></div><div class="pie">Tu app de comida · para Karen</div></section><section class="page "><h2>Condiciones que debe cumplir la app</h2>
+<p class="intro">Esto no se elige: la app debe cumplirlo, elijas lo que elijas. Algunas cosas ya están y otras se van a mejorar.</p>
+<div class="conds"><div class="cond"><b>Guarda de verdad</b><span>Solo dice “guardado” cuando sí se guardó, y funciona sin internet.</span></div><div class="cond"><b>Tus alimentos, bien hechos</b><span>Buscas, creas y corriges alimentos; cada uno dice de dónde salen sus valores (etiqueta, referencia o estimación).</span></div><div class="cond"><b>Cantidades reales</b><span>Gramos, fracciones y medidas caseras (taza, pieza, cucharada) según cada alimento.</span></div><div class="cond"><b>Sin regaños</b><span>Sin rojo ni “te pasaste”. Tampoco felicita por comer menos. Solo describe.</span></div><div class="cond"><b>“Sin dato” no es cero</b><span>Lo que no se sabe se ve como “sin dato”. Un día sin anotar no cuenta como día sin comer.</span></div><div class="cond"><b>Tú tienes el control</b><span>Metas opcionales; respaldo que se puede recuperar; y nada sale del teléfono sin que tú lo actives.</span></div></div>
+<h2 class="mt">¿Cómo comes tú?</h2>
+<p class="intro">Estas preguntas te ayudan a saber qué tarjetas leer primero. No esconden nada: puedes leer todas.</p>
+<table class="preg"><tr><td>¿Repites desayunos o comidas?</td><td>Mira las tarjetas <b>1, 2 y 3</b></td></tr><tr><td>¿Cocinas en casa?</td><td>Mira las tarjetas <b>4 y 5</b></td></tr><tr><td>¿Comes fuera seguido?</td><td>Mira las tarjetas <b>6, 9 y 11</b></td></tr><tr><td>¿Compras muchos productos empacados?</td><td>Mira las tarjetas <b>10 y 12</b></td></tr><tr><td>¿Quieres ver números todo el tiempo?</td><td>Mira las tarjetas <b>13</b></td></tr><tr><td>¿Te ayuda ver tu avance?</td><td>Mira las tarjetas <b>18, 24 y 25</b></td></tr></table><div class="pie">Tu app de comida · para Karen</div></section><section class="page "><h2>Anotar más rápido</h2><p class="intro">Lo que más ayuda a no dejar de anotar: no capturar lo mismo dos veces.</p><div class="grid"><div class="card">
+  <div class="card-top"><span class="num">1</span><h3>Comidas guardadas</h3></div>
+  <div class="marcas"><span class="estado nuevo">Se agrega</span><span class="sug">★ Sugerida</span></div>
+  <p>Guarda una combinación, como tu desayuno habitual, para volver a anotarla sin buscar cada alimento. Puedes revisar y cambiar las cantidades.</p>
+  <p class="dia"><b>En tu día:</b> Tu desayuno de siempre (2 huevos, 1 tortilla y café) se anota completo.</p>
+  <div class="chips"><span class="chip gratis">Sin costo mensual</span><span class="chip local">Funciona sin internet</span><span class="chip local">No envía tus datos</span></div>
+</div><div class="card">
+  <div class="card-top"><span class="num">2</span><h3>Copiar una comida</h3></div>
+  <div class="marcas"><span class="estado mejora">Se mejora</span><span class="sug">★ Sugerida</span></div>
+  <p>Copia solo el desayuno, la comida o la cena de otro día, ajusta lo que cambió y, si te equivocas, lo deshaces.</p>
+  <p class="dia"><b>En tu día:</b> Comiste lo mismo que ayer en la comida: lo copias y cambias la porción de arroz.</p>
+  <div class="chips"><span class="chip gratis">Sin costo mensual</span><span class="chip local">Funciona sin internet</span><span class="chip local">No envía tus datos</span></div>
+</div><div class="card">
+  <div class="card-top"><span class="num">3</span><h3>Frecuentes que recuerdan tu cantidad</h3></div>
+  <div class="marcas"><span class="estado mejora">Se mejora</span><span class="sug">★ Sugerida</span></div>
+  <p>Lo que comes seguido aparece primero y ya trae la cantidad que sueles poner.</p>
+  <p class="dia"><b>En tu día:</b> Tus 3 tortillas de siempre aparecen arriba y ya dicen 3.</p>
+  <div class="chips"><span class="chip gratis">Sin costo mensual</span><span class="chip local">Funciona sin internet</span><span class="chip local">No envía tus datos</span></div>
+</div><div class="card">
+  <div class="card-top"><span class="num">4</span><h3>Mis recetas caseras</h3></div>
+  <div class="marcas"><span class="estado nuevo">Se agrega</span><span class="sug">★ Sugerida</span></div>
+  <p>Guardas los ingredientes de un guiso (con aceite y todo), cuántas porciones salen, y la app calcula cada porción.</p>
+  <p class="dia"><b>En tu día:</b> Tu tinga de pollo se calcula una vez; después solo dices cuánto te serviste.</p>
+  <div class="chips"><span class="chip gratis">Sin costo mensual</span><span class="chip local">Funciona sin internet</span><span class="chip local">No envía tus datos</span></div>
+</div><div class="card">
+  <div class="card-top"><span class="num">5</span><h3>Varios alimentos de una vez</h3></div>
+  <div class="marcas"><span class="estado nuevo">Se agrega</span><span class="sug">★ Sugerida</span></div>
+  <p>Armas tu plato con varios alimentos y lo guardas todo junto, sin abrir y cerrar la pantalla para cada uno.</p>
+  <p class="dia"><b>En tu día:</b> Pollo, arroz, frijoles y ensalada en un solo paso.</p>
+  <div class="chips"><span class="chip gratis">Sin costo mensual</span><span class="chip local">Funciona sin internet</span><span class="chip local">No envía tus datos</span></div>
+</div><div class="card">
+  <div class="card-top"><span class="num">6</span><h3>Anotación aproximada</h3></div>
+  <div class="marcas"><span class="estado nuevo">Se agrega</span><span class="sug">★ Sugerida</span></div>
+  <p>Cuando no sabes bien qué comiste, anotas un cálculo aproximado y la app lo marca así. Lo que no sabes queda como “sin dato”, no como cero.</p>
+  <p class="dia"><b>En tu día:</b> Comiste en una fiesta: anotas “comida aproximada” y sigues con tu día.</p>
+  <div class="chips"><span class="chip gratis">Sin costo mensual</span><span class="chip local">Funciona sin internet</span><span class="chip local">No envía tus datos</span></div>
+</div><div class="card">
+  <div class="card-top"><span class="num">7</span><h3>Nombrar y ordenar mis comidas</h3></div>
+  <div class="marcas"><span class="estado nuevo">Se agrega</span></div>
+  <p>Cambias los apartados del día a tu rutina: por ejemplo, “Almuerzo” o “Antes del gym”, y los acomodas a tu gusto.</p>
+  <p class="dia"><b>En tu día:</b> Tu día tiene desayuno, almuerzo, comida y cena.</p>
+  <div class="chips"><span class="chip gratis">Sin costo mensual</span><span class="chip local">Funciona sin internet</span><span class="chip local">No envía tus datos</span></div>
+</div><div class="card">
+  <div class="card-top"><span class="num">8</span><h3>Planear por adelantado</h3></div>
+  <div class="marcas"><span class="estado mejora">Se mejora</span></div>
+  <p>Dejas preparado lo que piensas comer mañana y luego confirmas lo que sí comiste.</p>
+  <p class="dia"><b>En tu día:</b> En la noche planeas tu comida de mañana para el trabajo.</p>
+  <div class="chips"><span class="chip gratis">Sin costo mensual</span><span class="chip local">Funciona sin internet</span><span class="chip local">No envía tus datos</span></div>
+</div></div><div class="pie">Tu app de comida · para Karen</div></section><section class="page "><h2>Ayudas con IA y cámara</h2><p class="intro">Si eliges “Sí, ahora”, primero hacemos una prueba y después decides si se queda.</p><div class="grid"><div class="card">
+  <div class="card-top"><span class="num">9</span><h3>Describir lo que comiste con IA</h3></div>
+  <div class="marcas"><span class="estado nuevo">Se agrega</span><span class="prueba">Primero se prueba</span></div>
+  <p>Escribe o dicta con el teclado algo como “dos tacos al pastor y una horchata”. La app propone alimentos, cantidades y valores aproximados, y muestra qué supuso. Puedes corregirlos antes de guardar.</p>
+  <p class="dia"><b>En tu día:</b> Sales de la taquería y lo dictas en 10 segundos.</p>
+  <div class="chips"><span class="chip ia">IA: ~$20–60 al mes</span><span class="chip red">Necesita internet</span><span class="chip envia">Envía tu descripción a la IA</span></div>
+</div><div class="card">
+  <div class="card-top"><span class="num">10</span><h3>Escanear código de barras</h3></div>
+  <div class="marcas"><span class="estado nuevo">Se agrega</span><span class="prueba">Primero se prueba</span></div>
+  <p>Apuntas la cámara al código del empaque y la app busca el producto en una base pública. Si no aparece, lo capturas tú.</p>
+  <p class="dia"><b>En tu día:</b> Tu yogurt o tu barra de proteína se agregan sin copiar la etiqueta.</p>
+  <div class="chips"><span class="chip gratis">Sin costo mensual</span><span class="chip red">Necesita internet</span><span class="chip envia">Envía solo el código</span></div>
+</div><div class="card">
+  <div class="card-top"><span class="num">11</span><h3>Foto del plato con IA</h3></div>
+  <div class="marcas"><span class="estado nuevo">Se agrega</span><span class="prueba">Primero se prueba</span></div>
+  <p>Tomas foto y la IA propone qué hay y cuánto. Es una estimación que se equivoca seguido en porciones, por eso siempre la revisas.</p>
+  <p class="dia"><b>En tu día:</b> Un plato en un restaurante del que no sabes la receta.</p>
+  <div class="chips"><span class="chip ia">IA: ~$20–60 al mes</span><span class="chip red">Necesita internet</span><span class="chip envia">Envía la foto a la IA</span></div>
+</div><div class="card">
+  <div class="card-top"><span class="num">12</span><h3>Foto de la etiqueta</h3></div>
+  <div class="marcas"><span class="estado nuevo">Se agrega</span><span class="prueba">Primero se prueba</span></div>
+  <p>Tomas foto de la tabla nutrimental de un producto y la app llena los datos por ti. Tú los confirmas.</p>
+  <p class="dia"><b>En tu día:</b> Un producto nuevo del súper que no estaba en la lista.</p>
+  <div class="chips"><span class="chip ia">IA: ~$20–60 al mes</span><span class="chip red">Necesita internet</span><span class="chip envia">Envía la foto de la etiqueta</span></div>
+</div></div><div class="pie">Tu app de comida · para Karen</div></section><section class="page "><h2>Metas, pantalla y planes</h2><p class="intro">Cómo quieres ver tu día y hacia dónde vas.</p><div class="grid"><div class="card">
+  <div class="card-top"><span class="num">13</span><h3>Elegir qué ver</h3></div>
+  <div class="marcas"><span class="estado nuevo">Se agrega</span><span class="sug">★ Sugerida</span></div>
+  <p>Tú decides la pantalla: todo (calorías y macros), solo proteína, o un diario sin números (solo lo que comiste, con foto o texto).</p>
+  <p class="dia"><b>En tu día:</b> Una temporada solo quieres cuidar tu proteína, sin ver calorías.</p>
+  <div class="chips"><span class="chip gratis">Sin costo mensual</span><span class="chip local">Funciona sin internet</span><span class="chip local">No envía tus datos</span></div>
+</div><div class="card">
+  <div class="card-top"><span class="num">14</span><h3>Calculadora inicial</h3></div>
+  <div class="marcas"><span class="estado nuevo">Se agrega</span></div>
+  <p>Con tu edad, estatura, peso y actividad, la app sugiere metas de inicio. Es una estimación; tú las ajustas.</p>
+  <p class="dia"><b>En tu día:</b> No sabes cuánta proteína ponerte: te da un punto de partida.</p>
+  <div class="chips"><span class="chip gratis">Sin costo mensual</span><span class="chip local">Funciona sin internet</span><span class="chip local">No envía tus datos</span></div>
+</div><div class="card">
+  <div class="card-top"><span class="num">15</span><h3>Metas distintas por día</h3></div>
+  <div class="marcas"><span class="estado nuevo">Se agrega</span></div>
+  <p>Metas diferentes entre semana y fin de semana, o en días de ejercicio.</p>
+  <p class="dia"><b>En tu día:</b> Los sábados comes más: tu meta de ese día ya lo considera.</p>
+  <div class="chips"><span class="chip gratis">Sin costo mensual</span><span class="chip local">Funciona sin internet</span><span class="chip local">No envía tus datos</span></div>
+</div><div class="card">
+  <div class="card-top"><span class="num">16</span><h3>Ideas de qué comer</h3></div>
+  <div class="marcas"><span class="estado nuevo">Se agrega</span></div>
+  <p>Te sugiere opciones con tus propios alimentos y gustos, según lo que te queda del día.</p>
+  <p class="dia"><b>En tu día:</b> Son las 8 pm y te quedan 30 g de proteína: te da 3 ideas de cena.</p>
+  <div class="chips"><span class="chip gratis">Sin costo mensual</span><span class="chip local">Funciona sin internet</span><span class="chip local">No envía tus datos</span></div>
+</div><div class="card">
+  <div class="card-top"><span class="num">17</span><h3>Plan semanal y lista del súper</h3></div>
+  <div class="marcas"><span class="estado nuevo">Se agrega</span></div>
+  <p>Armas el menú de la semana y la app junta los ingredientes en una lista de compras.</p>
+  <p class="dia"><b>En tu día:</b> El domingo planeas la semana y vas al súper con la lista.</p>
+  <div class="chips"><span class="chip gratis">Sin costo mensual</span><span class="chip local">Funciona sin internet</span><span class="chip local">No envía tus datos</span></div>
+</div></div><div class="pie">Tu app de comida · para Karen</div></section><section class="page "><h2>Seguimiento y avances</h2><p class="intro">Todo apagado al inicio; activas solo lo que te sirva.</p><div class="grid"><div class="card">
+  <div class="card-top"><span class="num">18</span><h3>Peso y tendencia</h3></div>
+  <div class="marcas"><span class="estado nuevo">Se agrega</span></div>
+  <p>Anotas tu peso cuando quieras y una línea suave muestra hacia dónde va, sin que un día aislado te confunda.</p>
+  <p class="dia"><b>En tu día:</b> Subiste medio kilo un lunes, pero la tendencia del mes va bajando.</p>
+  <div class="chips"><span class="chip gratis">Sin costo mensual</span><span class="chip local">Funciona sin internet</span><span class="chip local">No envía tus datos</span></div>
+</div><div class="card">
+  <div class="card-top"><span class="num">19</span><h3>Medidas</h3></div>
+  <div class="marcas"><span class="estado nuevo">Se agrega</span></div>
+  <p>Guardas cintura, cadera u otras medidas con su fecha.</p>
+  <p class="dia"><b>En tu día:</b> Una vez al mes te mides la cintura.</p>
+  <div class="chips"><span class="chip gratis">Sin costo mensual</span><span class="chip local">Funciona sin internet</span><span class="chip local">No envía tus datos</span></div>
+</div><div class="card">
+  <div class="card-top"><span class="num">20</span><h3>Agua</h3></div>
+  <div class="marcas"><span class="estado nuevo">Se agrega</span></div>
+  <p>Cuentas vasos o mililitros con un toque.</p>
+  <p class="dia"><b>En tu día:</b> Llevas 5 de 8 vasos a media tarde.</p>
+  <div class="chips"><span class="chip gratis">Sin costo mensual</span><span class="chip local">Funciona sin internet</span><span class="chip local">No envía tus datos</span></div>
+</div><div class="card">
+  <div class="card-top"><span class="num">21</span><h3>Fibra, azúcar y sodio</h3></div>
+  <div class="marcas"><span class="estado nuevo">Se agrega</span></div>
+  <p>Además de los macros, ves estos valores cuando el alimento los tiene. Si no los tiene, dice “sin dato”.</p>
+  <p class="dia"><b>En tu día:</b> Quieres comer más fibra y ver cuánta llevas.</p>
+  <div class="chips"><span class="chip gratis">Sin costo mensual</span><span class="chip local">Funciona sin internet</span><span class="chip local">No envía tus datos</span></div>
+</div><div class="card">
+  <div class="card-top"><span class="num">22</span><h3>Fotos de progreso</h3></div>
+  <div class="marcas"><span class="estado nuevo">Se agrega</span></div>
+  <p>Guardas fotos tuyas por fecha para compararlas. Nunca se suben a internet, salvo que tú lo elijas.</p>
+  <p class="dia"><b>En tu día:</b> Comparas una foto de enero con una de junio.</p>
+  <div class="chips"><span class="chip gratis">Sin costo mensual</span><span class="chip local">Funciona sin internet</span><span class="chip local">No envía tus datos</span></div>
+</div><div class="card">
+  <div class="card-top"><span class="num">23</span><h3>Notas de sueño, ánimo o ciclo</h3></div>
+  <div class="marcas"><span class="estado nuevo">Se agrega</span></div>
+  <p>Una nota corta del día. Cada una se activa por separado.</p>
+  <p class="dia"><b>En tu día:</b> Notas que comes distinto los días que duermes mal.</p>
+  <div class="chips"><span class="chip gratis">Sin costo mensual</span><span class="chip local">Funciona sin internet</span><span class="chip local">No envía tus datos</span></div>
+</div><div class="card">
+  <div class="card-top"><span class="num">24</span><h3>Resumen semanal</h3></div>
+  <div class="marcas"><span class="estado nuevo">Se agrega</span><span class="sug">★ Sugerida</span></div>
+  <p>Promedios de la semana y cuántos días tienen registro, porque un día sin anotar no es un día sin comer.</p>
+  <p class="dia"><b>En tu día:</b> El domingo ves cómo te fue en proteína toda la semana.</p>
+  <div class="chips"><span class="chip gratis">Sin costo mensual</span><span class="chip local">Funciona sin internet</span><span class="chip local">No envía tus datos</span></div>
+</div><div class="card">
+  <div class="card-top"><span class="num">25</span><h3>Reporte para tu nutrióloga</h3></div>
+  <div class="marcas"><span class="estado nuevo">Se agrega</span></div>
+  <p>Un PDF con las fechas y datos que tú elijas, para llevarlo a consulta o mandarlo.</p>
+  <p class="dia"><b>En tu día:</b> Antes de tu cita generas el reporte del último mes.</p>
+  <div class="chips"><span class="chip gratis">Sin costo mensual</span><span class="chip local">Funciona sin internet</span><span class="chip local">No envía tus datos</span></div>
+</div></div><div class="pie">Tu app de comida · para Karen</div></section><section class="page "><h2>Avisos, atajos y tus datos</h2><p class="intro">Algunas usan un servicio en internet (ver página de costos y privacidad).</p><div class="grid"><div class="card">
+  <div class="card-top"><span class="num">26</span><h3>Recordatorios</h3></div>
+  <div class="marcas"><span class="estado nuevo">Se agrega</span></div>
+  <p>Avisos a la hora que tú elijas, que puedes pausar cuando quieras. Otra opción sin servicio: usar la app Recordatorios del iPhone.</p>
+  <p class="dia"><b>En tu día:</b> A las 4 pm: “¿Anotas tu comida?”.</p>
+  <div class="chips"><span class="chip serv">Servicio: $0 normalmente</span><span class="chip red">Necesita internet</span><span class="chip envia">Envía tus horarios de aviso</span></div>
+</div><div class="card">
+  <div class="card-top"><span class="num">27</span><h3>Siri: “Anotar comida”</h3></div>
+  <div class="marcas"><span class="estado nuevo">Se agrega</span></div>
+  <p>Le dices a Siri “Anotar comida” y se abre la app lista para escribir o dictar. Requiere configurar un Atajo una vez.</p>
+  <p class="dia"><b>En tu día:</b> Con las manos ocupadas en la cocina.</p>
+  <div class="chips"><span class="chip gratis">Sin costo mensual</span><span class="chip local">Funciona sin internet</span><span class="chip local">No envía tus datos</span></div>
+</div><div class="card">
+  <div class="card-top"><span class="num">28</span><h3>Peso desde Apple Salud</h3></div>
+  <div class="marcas"><span class="estado nuevo">Se agrega</span><span class="prueba">Primero se prueba</span></div>
+  <p>Un Atajo del iPhone pasa tu peso de la app Salud a esta app, para no escribirlo dos veces. Se prueba primero en tu teléfono.</p>
+  <p class="dia"><b>En tu día:</b> Tu báscula guarda el peso en Salud y aquí aparece solo.</p>
+  <div class="chips"><span class="chip serv">Servicio: $0 normalmente</span><span class="chip red">Necesita internet</span><span class="chip envia">Envía solo tu peso</span></div>
+</div><div class="card">
+  <div class="card-top"><span class="num">29</span><h3>Respaldo automático</h3></div>
+  <div class="marcas"><span class="estado nuevo">Se agrega</span><span class="sug">★ Sugerida</span></div>
+  <p>Mientras usas la app con internet, se envían tus cambios para guardar un respaldo fuera del teléfono. Verás la fecha de la última copia confirmada y si quedan cambios pendientes. Podrás restaurar hasta esa copia. Tú eliges si incluye fotos y si lo proteges con tu clave (ver página de privacidad).</p>
+  <p class="dia"><b>En tu día:</b> Cambias de iPhone y recuperas tu historial.</p>
+  <div class="chips"><span class="chip serv">Servicio: $0 normalmente</span><span class="chip red">Necesita internet</span><span class="chip envia">Envía tu diario al respaldo</span></div>
+</div><div class="card">
+  <div class="card-top"><span class="num">30</span><h3>Usar en otro teléfono o tableta</h3></div>
+  <div class="marcas"><span class="estado nuevo">Se agrega</span></div>
+  <p>Tu diario aparece igual en otro aparato, por ejemplo un iPad.</p>
+  <p class="dia"><b>En tu día:</b> Revisas tu semana en la tableta.</p>
+  <div class="chips"><span class="chip serv">Servicio: $0 normalmente</span><span class="chip red">Necesita internet</span><span class="chip envia">Envía tu diario al servicio</span></div>
+</div></div><div class="pie">Tu app de comida · para Karen</div></section><section class="page "><h2>Otras ideas</h2>
+<p class="intro">Las tienen otras apps. No las recomendamos ni las descartamos; están aquí por si te interesan.</p>
+<div class="grid"><div class="card chica"><div class="card-top"><span class="num">31</span><h3>Ayuno</h3></div><p>Registra a qué hora empiezas y terminas de comer, y cuántas horas pasan. Apagado por defecto.</p><div class="chips"><span class="chip gratis">Sin costo mensual</span><span class="chip local">Funciona sin internet</span><span class="chip local">No envía tus datos</span></div></div><div class="card chica"><div class="card-top"><span class="num">32</span><h3>Rachas y logros</h3></div><p>Cuenta los días seguidos que anotas y muestra logros. Siempre se pueden apagar.</p><div class="chips"><span class="chip gratis">Sin costo mensual</span><span class="chip local">Funciona sin internet</span><span class="chip local">No envía tus datos</span></div></div></div>
+<h2 class="mt">No disponible directamente en tu app</h2>
+<p class="intro">Tu app es una página instalada en el iPhone (no viene de la App Store), así que hay cosas que Apple no le permite. Para algunas hay una alternativa.</p>
+<table class="preg"><tr><th>Lo que no puede</th><th>Alternativa</th></tr><tr><td>Widget con tus macros en la pantalla de inicio</td><td>Un Atajo puede poner un botón para abrir la app.</td></tr><tr><td>App propia en el Apple Watch</td><td>Se pueden probar Atajos desde el reloj.</td></tr><tr><td>Leer Apple Salud directamente</td><td>El peso puede llegar con un Atajo (función 28).</td></tr><tr><td>Medir el plato con el sensor 3D del iPhone</td><td>La foto con IA (11) da una estimación.</td></tr></table><div class="pie">Tu app de comida · para Karen</div></section><section class="page "><h2>Costos y privacidad</h2>
+<div class="dos-col">
+<div>
+<h4>Lo que cuesta</h4>
+<ul class="lista">
+<li><span class="chip gratis">Sin costo mensual</span> La mayoría de las funciones viven en tu teléfono y no cuestan nada al mes.</li>
+<li><span class="chip serv">Servicio: $0 normalmente</span> Respaldo, recordatorios y otro aparato usan <b>un solo servicio en internet</b> que comparten. Su plan gratuito debería alcanzar para una persona; si algún día no alcanza, cuesta unos 5 dólares al mes.</li>
+<li><span class="chip ia">IA: ~$20–60 al mes</span> Las funciones con IA usan el mismo servicio y pagan por uso. Calculamos unos <b>$20 a $60 pesos al mes</b> anotando 6 comidas al día. Es un estimado, no un precio fijo, y se le pone un límite de gasto.</li>
+</ul>
+</div>
+<div>
+<h4>Quién puede ver tu diario</h4>
+<p><b>Tú, en tu teléfono.</b> Nada sale de ahí hasta que actives una función que lo diga en su etiqueta.</p>
+<p>Si activas el respaldo, eliges una de dos formas:</p>
+<div class="cond"><b>Respaldo normal</b><span>Fácil de recuperar. Quien administra el servicio (Emmanuel) técnicamente podría verlo. Él se compromete a no hacerlo, pero la app no lo impide.</span></div>
+<div class="cond"><b>Respaldo con tu clave</b><span>Tu teléfono cifra la copia con una frase que solo tú sabes, antes de enviarla. El servicio no recibe tu frase, así que la copia guardada no se puede leer. Si olvidas la frase, ese respaldo no se puede recuperar. Tu teléfono y la app siguen necesitando cuidado.</span></div>
+<p>Las funciones con IA mandan solo lo necesario para esa consulta (tu descripción o tu foto) a la empresa de IA. Tu peso, tus notas y tus fotos de progreso <b>nunca</b> se mandan a la IA.</p>
+</div></div><div class="pie">Tu app de comida · para Karen</div></section><section class="page resumen"><h2>Tu hoja para marcar</h2>
+<p class="intro">Rellena un círculo por renglón. ★ = sugerida.</p>
+<table class="hoja"><tr><th></th><th>Función</th><th>Sí, ahora</th><th>Quizá después</th><th>No me interesa</th></tr><tr class="g"><td colspan="5">Anotar más rápido</td></tr><tr><td class="n">1</td><td>Comidas guardadas <b>★</b></td><td class="o"><i></i></td><td class="o"><i></i></td><td class="o"><i></i></td></tr><tr><td class="n">2</td><td>Copiar una comida <b>★</b></td><td class="o"><i></i></td><td class="o"><i></i></td><td class="o"><i></i></td></tr><tr><td class="n">3</td><td>Frecuentes que recuerdan tu cantidad <b>★</b></td><td class="o"><i></i></td><td class="o"><i></i></td><td class="o"><i></i></td></tr><tr><td class="n">4</td><td>Mis recetas caseras <b>★</b></td><td class="o"><i></i></td><td class="o"><i></i></td><td class="o"><i></i></td></tr><tr><td class="n">5</td><td>Varios alimentos de una vez <b>★</b></td><td class="o"><i></i></td><td class="o"><i></i></td><td class="o"><i></i></td></tr><tr><td class="n">6</td><td>Anotación aproximada <b>★</b></td><td class="o"><i></i></td><td class="o"><i></i></td><td class="o"><i></i></td></tr><tr><td class="n">7</td><td>Nombrar y ordenar mis comidas</td><td class="o"><i></i></td><td class="o"><i></i></td><td class="o"><i></i></td></tr><tr><td class="n">8</td><td>Planear por adelantado</td><td class="o"><i></i></td><td class="o"><i></i></td><td class="o"><i></i></td></tr><tr class="g"><td colspan="5">Ayudas con IA y cámara</td></tr><tr><td class="n">9</td><td>Describir lo que comiste con IA</td><td class="o"><i></i></td><td class="o"><i></i></td><td class="o"><i></i></td></tr><tr><td class="n">10</td><td>Escanear código de barras</td><td class="o"><i></i></td><td class="o"><i></i></td><td class="o"><i></i></td></tr><tr><td class="n">11</td><td>Foto del plato con IA</td><td class="o"><i></i></td><td class="o"><i></i></td><td class="o"><i></i></td></tr><tr><td class="n">12</td><td>Foto de la etiqueta</td><td class="o"><i></i></td><td class="o"><i></i></td><td class="o"><i></i></td></tr><tr class="g"><td colspan="5">Metas, pantalla y planes</td></tr><tr><td class="n">13</td><td>Elegir qué ver <b>★</b></td><td class="o"><i></i></td><td class="o"><i></i></td><td class="o"><i></i></td></tr><tr><td class="n">14</td><td>Calculadora inicial</td><td class="o"><i></i></td><td class="o"><i></i></td><td class="o"><i></i></td></tr><tr><td class="n">15</td><td>Metas distintas por día</td><td class="o"><i></i></td><td class="o"><i></i></td><td class="o"><i></i></td></tr><tr><td class="n">16</td><td>Ideas de qué comer</td><td class="o"><i></i></td><td class="o"><i></i></td><td class="o"><i></i></td></tr><tr><td class="n">17</td><td>Plan semanal y lista del súper</td><td class="o"><i></i></td><td class="o"><i></i></td><td class="o"><i></i></td></tr><tr class="g"><td colspan="5">Seguimiento y avances</td></tr><tr><td class="n">18</td><td>Peso y tendencia</td><td class="o"><i></i></td><td class="o"><i></i></td><td class="o"><i></i></td></tr><tr><td class="n">19</td><td>Medidas</td><td class="o"><i></i></td><td class="o"><i></i></td><td class="o"><i></i></td></tr><tr><td class="n">20</td><td>Agua</td><td class="o"><i></i></td><td class="o"><i></i></td><td class="o"><i></i></td></tr><tr><td class="n">21</td><td>Fibra, azúcar y sodio</td><td class="o"><i></i></td><td class="o"><i></i></td><td class="o"><i></i></td></tr><tr><td class="n">22</td><td>Fotos de progreso</td><td class="o"><i></i></td><td class="o"><i></i></td><td class="o"><i></i></td></tr><tr><td class="n">23</td><td>Notas de sueño, ánimo o ciclo</td><td class="o"><i></i></td><td class="o"><i></i></td><td class="o"><i></i></td></tr><tr><td class="n">24</td><td>Resumen semanal <b>★</b></td><td class="o"><i></i></td><td class="o"><i></i></td><td class="o"><i></i></td></tr><tr><td class="n">25</td><td>Reporte para tu nutrióloga</td><td class="o"><i></i></td><td class="o"><i></i></td><td class="o"><i></i></td></tr><tr class="g"><td colspan="5">Avisos, atajos y tus datos</td></tr><tr><td class="n">26</td><td>Recordatorios</td><td class="o"><i></i></td><td class="o"><i></i></td><td class="o"><i></i></td></tr><tr><td class="n">27</td><td>Siri: “Anotar comida”</td><td class="o"><i></i></td><td class="o"><i></i></td><td class="o"><i></i></td></tr><tr><td class="n">28</td><td>Peso desde Apple Salud</td><td class="o"><i></i></td><td class="o"><i></i></td><td class="o"><i></i></td></tr><tr><td class="n">29</td><td>Respaldo automático <b>★</b></td><td class="o"><i></i></td><td class="o"><i></i></td><td class="o"><i></i></td></tr><tr><td class="n">30</td><td>Usar en otro teléfono o tableta</td><td class="o"><i></i></td><td class="o"><i></i></td><td class="o"><i></i></td></tr><tr class="g"><td colspan="5">Otras ideas</td></tr><tr><td class="n">31</td><td>Ayuno</td><td class="o"><i></i></td><td class="o"><i></i></td><td class="o"><i></i></td></tr><tr><td class="n">32</td><td>Rachas y logros</td><td class="o"><i></i></td><td class="o"><i></i></td><td class="o"><i></i></td></tr></table>
+<div class="notas"><b>Notas o ideas tuyas:</b></div><div class="pie">Tu app de comida · para Karen</div></section></body></html>
